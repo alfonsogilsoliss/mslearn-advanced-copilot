@@ -1,79 +1,138 @@
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/MicrosoftDocs/mslearn-advanced-copilot)
+[![Abrir en GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/MicrosoftDocs/mslearn-advanced-copilot)
 
-# Apply advanced GitHub Copilot techniques
-Discover new ways to leverage advanced GitHub Copilot techniques within a Python repository to implement an interactive HTML form and an Application Programming Interface (API) endpoint. 
-Gain more practical experience by using this repository that contains a Python Web Application that hosts a Travel Weather API.
+# API de Clima para Viajes con FastAPI
+
+Este proyecto contiene una API web en Python construida con FastAPI.
+Expone información histórica de temperatura mínima y máxima por país,
+ciudad y mes a partir del archivo weather.json.
 
 [![Powered by Awesome Copilot](https://img.shields.io/badge/Powered_by-Awesome_Copilot-blue?logo=githubcopilot)](https://aka.ms/awesome-github-copilot)
 
-## Requirements
+## Inicio rápido
 
-1. Enable your [GitHub Copilot service](https://github.com/github-copilot/signup)
-1. Open [this repository with Codespaces](https://codespaces.new/MicrosoftDocs/mslearn-copilot-codespaces-python)
+### 1) Requisitos
 
-## 💪🏽 Exercise
-The current API is not exposing country/{country} which needs to be implemented to list cities. The route should allow only GET HTTP requests with a JSON response providing information from the historical high and low for that country, city, and given month.
+- Python 3.10 o superior
+- pip
 
-As with any implementation, this addition should include at least one test function to work with the pytest runner and test framework. 
+### 2) Clonar el repositorio
 
-### 🛠 Step 1: Add a new route 
-On our first exercise we will create a new route in our API. Go to the main.py file, and by using the inline chat with the following command `ctrl` + `i` (on Windows) or  `cmd` + `i`(on Mac) ask GitHub Copilot to help you create a new API that shows you the cities of a country. 
-
-`> Create a new route that exposes the cities of a country.`
-
-
-This prompt should give you something similar like this:
-
-
-```python
-# Create a new route that exposes the cities of a country:
-@app.get('/countries/{country}')
-def cities(country: str):
-    return list(data[country].keys())
-
+```bash
+git clone https://github.com/MicrosoftDocs/mslearn-advanced-copilot.git
+cd mslearn-advanced-copilot
 ```
-Note: Try your new route and refine your prompt until the result is as desired.
 
-### 🔎 Step 2: Create a test
-Now that you have created a new route, let's create a test with Copilot Chat for this route that uses Spain as the country. Remember to select your code and ask Copilot Chat to help you with this specific API that we just have created.
+### 3) Crear y activar un entorno virtual
 
-`> /tests help me to create a new test for this route that uses Spain as the country.`
+Linux o macOS:
 
-![Copilot Chat image example](./images/ideascopilot.png)
+```bash
+python -m venv .venv
+source .venv/bin/activate
+```
 
+Windows (PowerShell):
 
-Once Copilot has helped you to create your test, try it. If this is not functioning as expected, feel free to share those details with Copilot in the chat. For example:
+```powershell
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+```
 
-`> This test is not quite right, it is not including cities that doesn't exist. Only Seville is part of the API.`
+### 4) Instalar dependencias
 
+```bash
+pip install -r requirements.txt
+```
 
-It should give you another solution. Keep trying until you achieve the desired result.
+### 5) Ejecutar la API
 
-### 🐍 Step 3: Use an agent to write the project
-During this step we will be using an agent (workspace) to write the project documentation on how to run this project. In the GitHub Copilot Chat, we will try the following prompt:
+```bash
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
 
-`> @workspace help me to use an agent to write the project documentation on how to run it .`
+La aplicación quedará disponible en:
 
-Finally, verify the new endpoint is working by trying it out by going to the `/docs` endpoint and confirming that the endpoint shows up.
+- Documentación Swagger: http://localhost:8000/docs
+- Documentación ReDoc: http://localhost:8000/redoc
+- Ruta raíz: http://localhost:8000/ (redirige a /docs)
 
+## Endpoints disponibles
 
-🚀 Congratulations, through the exercise, you haven't only used copilot to generate code but also done it in an interactive and fun way! You can use GitHub Copilot to not only generate code, but write documentation, test your applications and more.
+### Obtener países
 
+- Método: GET
+- Ruta: /countries
+- Respuesta: lista de países disponibles
 
+Ejemplo:
 
-# Legal Notices
+```bash
+curl http://localhost:8000/countries
+```
 
-Microsoft and any contributors grant you a license to the Microsoft documentation and other content
-in this repository under the [Creative Commons Attribution 4.0 International Public License](https://creativecommons.org/licenses/by/4.0/legalcode),
-see the [LICENSE](LICENSE) file, and grant you a license to any code in the repository under the [MIT License](https://opensource.org/licenses/MIT), see the
-[LICENSE-CODE](LICENSE-CODE) file.
+### Obtener ciudades por país o región
 
-Microsoft, Windows, Microsoft Azure and/or other Microsoft products and services referenced in the documentation
-may be either trademarks or registered trademarks of Microsoft in the United States and/or other countries.
-The licenses for this project do not grant you rights to use any Microsoft names, logos, or trademarks.
-Microsoft's general trademark guidelines can be found at http://go.microsoft.com/fwlink/?LinkID=254653.
+- Método: GET
+- Ruta: /countries/{country}
+- Respuesta: lista de ciudades del país o región indicado
+- Error 404: si el país o región no existe
 
-Privacy information can be found at https://privacy.microsoft.com/en-us/
+Ejemplos:
 
-Microsoft and any contributors reserve all other rights, whether under their respective copyrights, patents,
-or trademarks, whether by implication, estoppel or otherwise.
+```bash
+curl http://localhost:8000/countries/Spain
+curl http://localhost:8000/countries/Portugal
+```
+
+### Obtener clima por país, ciudad y mes
+
+- Método: GET
+- Ruta: /countries/{country}/{city}/{month}
+- Respuesta: objeto JSON con temperaturas high y low
+
+Ejemplo:
+
+```bash
+curl http://localhost:8000/countries/Spain/Seville/January
+```
+
+## Ejecutar pruebas
+
+Este proyecto utiliza pytest.
+
+```bash
+pytest -q
+```
+
+Si usas un entorno virtual, confirma que esté activado antes de ejecutar
+las pruebas para evitar errores de dependencias.
+
+## Estructura general del proyecto
+
+- main.py: aplicación FastAPI y definición de rutas
+- weather.json: datos históricos de clima
+- test_main.py: pruebas automáticas
+- static/: recursos estáticos del frontend
+
+## Desarrollo recomendado
+
+- Usa modo recarga con --reload durante el desarrollo.
+- Consulta /docs para explorar y probar los endpoints.
+- Agrega pruebas en test_main.py cada vez que incorpores una ruta nueva.
+
+## Avisos legales
+
+Microsoft y los contribuidores otorgan licencia para la documentación y
+otros contenidos de este repositorio bajo la licencia Creative Commons
+Attribution 4.0 International Public License:
+https://creativecommons.org/licenses/by/4.0/legalcode
+
+El código fuente se distribuye bajo licencia MIT. Revisa los archivos
+LICENSE y LICENSE-CODE para más detalles.
+
+Microsoft, Windows, Microsoft Azure y otros nombres de productos o
+servicios de Microsoft mencionados en la documentación pueden ser marcas
+registradas en Estados Unidos y otros países.
+
+Información de privacidad:
+https://privacy.microsoft.com/en-us/

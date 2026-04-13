@@ -110,7 +110,7 @@
     }
   },
   "Spain": {
-    "Seville": {
+    "Sevilla": {
       "January": {"high": 61, "low": 41},
       "February": {"high": 65, "low": 43},
       "March": {"high": 71, "low": 46},
@@ -123,6 +123,20 @@
       "October": {"high": 79, "low": 58},
       "November": {"high": 69, "low": 51},
       "December": {"high": 63, "low": 45}
+    },
+    "Madrid": {
+      "January": {"high": 51, "low": 31},
+      "February": {"high": 55, "low": 33},
+      "March": {"high": 61, "low": 38},
+      "April": {"high": 68, "low": 43},
+      "May": {"high": 76, "low": 50},
+      "June": {"high": 85, "low": 57},
+      "July": {"high": 93, "low": 63},
+      "August": {"high": 93, "low": 63},
+      "September": {"high": 85, "low": 57},
+      "October": {"high": 76, "low": 50},
+      "November": {"high": 68, "low": 43},
+      "December": {"high": 61, "low": 38}
     }
   }
 }
