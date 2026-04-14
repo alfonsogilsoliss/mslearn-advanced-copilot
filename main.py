@@ -42,6 +42,18 @@ def cities_by_country(country: str):
 
 @app.get('/countries/{country}/{city}/{month}')
 def monthly_average(country: str, city: str, month: str):
+    """
+    Return the average high/low temperatures for a given country, city, and month.
+
+    Raises:
+        HTTPException (404): If the country, city, or month is not found in the data.
+    """
+    if country not in data:
+        raise HTTPException(status_code=404, detail='Country not found')
+    if city not in data[country]:
+        raise HTTPException(status_code=404, detail='City not found')
+    if month not in data[country][city]:
+        raise HTTPException(status_code=404, detail='Month not found')
     return data[country][city][month]
 
 # Generate the OpenAPI schema:
